@@ -1,4 +1,10 @@
-# ProyectoBingo
+# Bingo
+
+Juego de bingo en Java con interfaz gráfica y componentes de comunicación entre jugadores.
+
+Proyecto académico de BUAP. Seleccionado por su función y contenido.
+
+## Documentación y requisitos
 
 Proyecto o conjunto de prácticas académicas de BUAP. Se publica como parte del archivo de trabajos de `6SML98`.
 
