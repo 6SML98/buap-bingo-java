@@ -33,7 +33,7 @@ public class Administracion implements Proceso {
             writer.println("Numero ganador: " + numeros[10]);
             writer.println("----------------------------");
         } catch (IOException e) {
-            area.append("Error al guardar resultados: " + e.getMessage() + "\n");
+            UiLog.append(area, "Error al guardar resultados: " + e.getMessage() + "\n");
         }
     }
 
@@ -49,18 +49,18 @@ public class Administracion implements Proceso {
 
         for (int i = 0; i < 10; i++) {
             numeros[i] = lectores[i].objInt;
-            area.append("Administracion recibio de Jugador " + i + ": " + numeros[i] + "\n");
+            UiLog.append(area, "Administracion recibio de Jugador " + i + ": " + numeros[i] + "\n");
         }
 
         numeros[10] = (Integer) canalSorteo.receive();
-        area.append("Administracion recibio número ganador del Sorteo: " + numeros[10] + "\n");
+        UiLog.append(area, "Administracion recibio número ganador del Sorteo: " + numeros[10] + "\n");
 
         canalEscrutinioIn.send(numeros);
 
         int[] resultados = (int[]) canalEscrutinioOut.receive();
         for (int i = 0; i < resultados.length; i++) {
             String estado = resultados[i] == 1 ? "GANADOR" : "PERDEDOR";
-            area.append("Jugador " + i + ": " + estado + "\n");
+            UiLog.append(area, "Jugador " + i + ": " + estado + "\n");
         }
 
         guardarResultados(numeros, resultados);

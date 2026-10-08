@@ -63,8 +63,11 @@ public class BingoGUI extends JFrame {
         areaResultados.setText("");
         iconoEstado.setText("🎮");
 
+        botonJugar.setEnabled(false);
+        new SwingWorker<Void, Void>() {
+            @Override protected Void doInBackground() {
         for (int ronda = 1; ronda <= partidas; ronda++) {
-            areaResultados.append("\n🟡 Partida " + ronda + " -----------------------\n");
+            UiLog.append(areaResultados, "\n🟡 Partida " + ronda + " -----------------------\n");
 
             int[] numeros = new int[10];
             for (int i = 0; i < 10; i++) {
@@ -84,7 +87,7 @@ public class BingoGUI extends JFrame {
             for (int i = 0; i < 10; i++) {
                 int finalI = i;
                 jugadores[i] = () -> {
-                    areaResultados.append("👤 Jugador " + finalI + " eligio el numero " + numeros[finalI] + "\n");
+                    UiLog.append(areaResultados, "👤 Jugador " + finalI + " eligio el numero " + numeros[finalI] + "\n");
                     new Escribe(canalesJugadores[finalI], numeros[finalI]).run();
                 };
             }
@@ -102,11 +105,23 @@ public class BingoGUI extends JFrame {
             new Paralelo(todos).run();
         }
 
-        iconoEstado.setText("🏁");
-        areaResultados.append("\n✅ Bingo terminado.\n");
+        return null;
+            }
+            @Override protected void done() {
+                try {
+                    get();
+                    iconoEstado.setText("🏁");
+                    UiLog.append(areaResultados, "\nBingo terminado.\n");
+                } catch (Exception ex) {
+                    UiLog.append(areaResultados, "Error de simulación: " + ex.getMessage() + "\n");
+                } finally {
+                    botonJugar.setEnabled(true);
+                }
+            }
+        }.execute();
     }
 
     public static void main(String[] args) {
-        new BingoGUI();
+        SwingUtilities.invokeLater(BingoGUI::new);
     }
 }
